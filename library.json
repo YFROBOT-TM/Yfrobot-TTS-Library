@@ -1,11 +1,11 @@
 {
-    "name": "Yfrobot Fingerprint Identification Sensor Library",
-    "keywords": "yfrobot, Fingerprint, FPM383C, FPM383D, FPM383F",
-    "description": "Library that makes Fingerprint Identification sensor work easy to use.",
+    "name": "Yfrobot TTS modules Library",
+    "keywords": "yfrobot, TTS, speech synthesis",
+    "description": "Library that makes TTS modules work easy to use.",
     "repository":
     {
         "type": "git",
-        "url": "https://github.com/YFROBOT-TM/Yfrobot-FPM383-Library.git"
+        "url": "https://github.com/YFROBOT-TM/Yfrobot-TTS-Library.git"
     },
     "frameworks": "arduino",
     "platforms": [

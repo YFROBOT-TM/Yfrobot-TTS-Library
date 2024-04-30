@@ -1,17 +1,15 @@
 #######################################
 # Classes, datatypes (KEYWORD1)
 #######################################
-YFROBOTFPM383	KEYWORD1
+YFTTS	KEYWORD1
 
 #######################################
 # Methods and Functions (KEYWORD2)
 #######################################
-getChipSN    KEYWORD2
-empty	KEYWORD2
-deleteID	KEYWORD2
-enroll	KEYWORD2
-identify	KEYWORD2
-inquiry	KEYWORD2
+begin    KEYWORD2
+speak	KEYWORD2
+setTTSParameters	KEYWORD2
+checkWorkState	KEYWORD2
 
 #######################################
 # Constants (LITERAL1)

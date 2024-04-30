@@ -1,7 +1,7 @@
-# Yfrobot-FPM383-Library
-YFROBOT FPM383 Sensor Library for Arduino
+# Yfrobot-TTS-Library
+YFROBOT TTS module Library for Arduino
 
-![](./assets/Fingerprint_Identification_Sensor.png)
+![](./assets/YFTTS.jpg)![](./assets/yfrobot_tts.png)
 
 ## 相关链接 Links
 
@@ -10,45 +10,45 @@ YFROBOT FPM383 Sensor Library for Arduino
 #### 库使用说明：
 调用库：
 
-`#include <yfrobot_fpm383.h>   // 包含头文件`
+`#include <YFTTS.h>   // 包含头文件`
 
 创建对象：
 
 UNO 主板：
-`YFROBOTFPM383 fpm(9, 8);  //软串口引脚，RX：D9    TX：D8`
+`YFROBOTTTS YF_TTS(9, 8);  //软串口引脚，RX：D9    TX：D8`
 
 ESP32 主板：
-`YFROBOTFPM383 fpm(16, 17); // 使用 ESP32 的硬件串口2，自定义引脚RX：16    TX：17`
+`YFROBOTTTS YF_TTS(16, 17); // 使用 ESP32 的硬件串口2，自定义引脚RX：16    TX：17`
 
 Methods：
 
 初始化，成功则返回模组序列号(String)，否则返回""。
 
-`fpm.getChipSN();`
+`YF_TTS.getChipSN();`
 
 验证指纹，并返回指纹ID
 参数：true，无手指时，LED反馈；false，无手指时，无LED反馈。
 
-`fpm.identify()`
+`YF_TTS.identify()`
 
 在ID位置注册指纹
 参数：注册ID，默认拼接4次（可自定义次数）。
 
-`fpm.enroll(ID, 4);` 
-`fpm.enroll(ID, 6);`
+`YF_TTS.enroll(ID, 4);` 
+`YF_TTS.enroll(ID, 6);`
 
 
 删除ID位置的指纹
 
-`fpm.deleteID(ID);`
+`YF_TTS.deleteID(ID);`
 
 清空指纹库
 
-`fpm.empty();`
+`YF_TTS.empty();`
 
 查询当前已注册指纹数量
 
-`fpm.inquiry();`
+`YF_TTS.inquiry();`
 
 
 ## 更新日志 Release Note
