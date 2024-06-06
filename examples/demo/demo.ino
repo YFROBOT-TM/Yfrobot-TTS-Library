@@ -1,55 +1,74 @@
 /*
-  指纹识别模块测试程序
-  添加注册指纹
-   模块闪烁红灯，表示此为止已注册过指纹，请更换位置
-   模块常亮蓝灯，表示可以注册指纹，默认拼接4次（可更改）
-   绿灯闪烁即灭，表示注册完成
+  语音合成测试程序
 
-  更多指令集请参见：http://file.yfrobot.com.cn/datasheet/FPM383C%E6%A8%A1%E7%BB%84%E9%80%9A%E4%BF%A1%E5%8D%8F%E8%AE%AE_V1.2.pdf
-
-  Author     : YFROBOT ZL
-  Website    : www.yfrobot.com.cn
-  update Time: 2024-04-11
+  关于引脚使用说明
+    语音合成模块使用串口通讯，引脚顺序为 G V RX TX；
+    理论上需要双引脚进行串口通讯，但实际模块只需要接收主板串口发送的数据，所以只需要使用模块的RX引脚。
 */
 
-#include "yfrobot_fpm383.h"
+#include <YFTTS.h>
 
-YFROBOTFPM383 fpm(9, 8);  //软串口引脚，RX：D9    TX：D8
-
-int ENROLLID_1 = 0;  // 在此位置注册指纹
-int flag_enroll = 255;
+// 配置主板RX、TX引脚根据实际连接更改
+YFTTS YF_TTS(-1, 10);  //假设我们使用10号引脚，不使用主板的 RX引脚
 
 void setup() {
-  // put your setup code here, to run once:
   Serial.begin(9600);
+  YF_TTS.begin(115200);  // 初始化TTS，默认波特率115200，请注意初始化需要500ms左右
+  /*
+    支持男声/女声发音人、10 级音量、10 级语速、10 级语调调节 
+    发音人：[m0]为女声，[m1]为男声，默认为[m0]女声 
+    音量：  [v0]-[v9]，音量由小到大，默认为中间值 
+    语速：  [s0]-[s9]，语速由快到慢，默认为中间值正常语速 
+    语调：  [t0]-[t9]，语调由低到高，默认为中间值正常语调
+  查看更多详情：https://pjfcckenlt.feishu.cn/wiki/JRItwhMCWi9DuOklQZScmdUjnVb
+  */
+  // 配置TTS，设置发音人、音量、语速、语调，以下配置可选，begin函数中已经默认配置
+  YF_TTS.setTTSParameters('m', 0);  // 发音人；
+  delay(500);
+  YF_TTS.setTTSParameters('s', 5);  // 语速；
+  delay(500);
+  YF_TTS.setTTSParameters('t', 5);  // 语调；
+  delay(500);
+  YF_TTS.setTTSParameters('v', 1);  // 音量；注意喇叭功率有限，推荐音量不超过2使用；
+  delay(500);
 
-  // 初始化
-  while (fpm.getChipSN() == "") {
-    Serial.println("等待......");
-    delay(200);  //等待指纹识别模块初始化完成
-  }
-  Serial.println(fpm.getChipSN());
+  /* 支持 15 种内置提示音效，其中:铃声 5 首；信息提示音 5 首；警示音 5 首
+    铃声
+        ring_1、ring_2、ring_3、ring_4、ring_5
+    信息提示音
+        message_1、message_2、message_3、message_4、message_5
+    警示音 
+        alert_1、alert_2、alert_3、alert_4、alert_5
+  */
+  YF_TTS.speak("alert_4");
+  delay(2000);
+  YF_TTS.speak("ring_1");
+  delay(2000);
 
-  Serial.println("开始");
-  delay(100);
+  /* 语音合成测试 */
+  YF_TTS.speak("谢谢使用");
+  delay(3000);
+  YF_TTS.speak("您好，欢迎光临");
+  delay(3000);
+  YF_TTS.speak("当前环境温度：26摄氏度");
+  delay(4000);
+
+  /* 带文本标注语音合成测试-
+      详情说明：https://pjfcckenlt.feishu.cn/wiki/OZcfwiVoziNnkxkKkIRcJwIZndg */
+
+  /* 带文本标注-多音字标记方式，语音合成测试 */
+  YF_TTS.speak("空调[=tiao2]调[=tiao2]到三十度");
+  delay(4000);
+  /* 带文本标注-数字标记方式，语音合成测试 */
+  YF_TTS.speak("共消费[n2]100 元，请拨打电话[n1]95511，手机号码[n3]17696701116。");
+  delay(9000);
+  /* 带文本标注-短停标记方式，语音合成测试 */
+  YF_TTS.speak("欢迎使用[w0]我司的语音合成模块");
+  delay(8000);
+
+
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
-  if (flag_enroll == 255) {
-    Serial.print("注册指纹，在ID:");
-    Serial.print(ENROLLID_1);
-    Serial.println("位置");
-    Serial.println("当前有10秒钟的时间，将需要注册的手指按压在模块上4次！");
-    flag_enroll = fpm.enroll(ENROLLID_1);
-    // flag_enroll = fpm.enroll(ENROLLID_1, 6); // 或者添加第二个参数，6（范围1~12） 拼接6次
-  } else if (flag_enroll == 01) {
-    Serial.println("该ID已注册指纹，请更换ID再注册！");
-  } else if (flag_enroll == 00) {
-    Serial.print("注册ID ");
-    Serial.print(ENROLLID_1);
-    Serial.println("，成功！");
-    flag_enroll = 02;  // 需要注册，请重新进入
-  }
-  delay(1000);
+  // delay(5000); // 每10秒说一次
 }

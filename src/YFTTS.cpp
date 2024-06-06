@@ -13,14 +13,23 @@
 YFTTS::YFTTS(int rxPin, int txPin)
 : _serial(rxPin, txPin) {} // 初始化_serial成员变量，配置串行通信的RX和TX引脚
 
+/**
+ * 初始化TTS引擎，设置通信波特率和默认参数。
+ * @param baudRate 串行通信的波特率。
+ */
 void YFTTS::begin(long baudRate) {
   _serial.begin(baudRate);
   setTTSParameters('m', 0);
-  setTTSParameters('v', 1);
   setTTSParameters('s', 5);
   setTTSParameters('t', 5);
+  setTTSParameters('v', 1);
+  delay(500);
 }
 
+/**
+ * 让TTS引擎说话。
+ * @param data 要朗读的文本。
+ */
 void YFTTS::speak(const char *data) {
   if (checkWorkState() != 0) {
     return;
@@ -28,11 +37,19 @@ void YFTTS::speak(const char *data) {
   sendData(data);
 }
 
+/**
+ * 检查TTS引擎的工作状态。
+ * @return 工作状态码，0表示空闲，其他值表示忙。
+ */
 int YFTTS::checkWorkState() {
   // 假定设备总是空闲
   return 0;
 }
 
+/**
+ * 发送数据到TTS引擎。
+ * @param data 要发送的文本数据。
+ */
 void YFTTS::sendData(const char *data) {
   size_t utf8Length = strlen(data);
   unsigned char gb2312_str[utf8Length * 2];  // Assuming maximum size after conversion
@@ -60,6 +77,11 @@ void YFTTS::sendData(const char *data) {
   
 }
 
+/**
+ * 设置TTS参数，如发音人、音量、语速和语调。
+ * @param parameter 参数类型，'m'为发音人，'s'为语速，'t'为语调，'v'为音量。
+ * @param value 参数的值，范围为0-9。
+ */
 void YFTTS::setTTSParameters(char parameter, int value) {
   // 参数有效性检查
   if (value < 0 || value > 9) {

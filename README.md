@@ -16,52 +16,31 @@ YFROBOT TTS module Library for Arduino
 创建对象：
 
 UNO 主板：
-`YFROBOTTTS YF_TTS(9, 8);  //软串口引脚，RX：D9    TX：D8`
+`YFROBOTTTS YF_TTS(9, 8);  //软串口引脚，RX：D9（可以忽略）   TX：D8`
 
 ESP32 主板：
 `YFROBOTTTS YF_TTS(16, 17); // 使用 ESP32 的硬件串口2，自定义引脚RX：16    TX：17`
 
 Methods：
 
-初始化，成功则返回模组序列号(String)，否则返回""。
+初始化TTS引擎，设置通信波特率和默认参数。
+`YF_TTS.begin(115200);`
 
-`YF_TTS.getChipSN();`
+设置TTS参数，如发音人、音量、语速和语调。
+@param parameter 参数类型，'m'为发音人，'s'为语速，'t'为语调，'v'为音量。
+@param value 参数的值，范围为0-9。
+查看更多详情：https://pjfcckenlt.feishu.cn/wiki/JRItwhMCWi9DuOklQZScmdUjnVb
+`YF_TTS.setTTSParameters('m', 0);`
 
-验证指纹，并返回指纹ID
-参数：true，无手指时，LED反馈；false，无手指时，无LED反馈。
-
-`YF_TTS.identify()`
-
-在ID位置注册指纹
-参数：注册ID，默认拼接4次（可自定义次数）。
-
-`YF_TTS.enroll(ID, 4);` 
-`YF_TTS.enroll(ID, 6);`
-
-
-删除ID位置的指纹
-
-`YF_TTS.deleteID(ID);`
-
-清空指纹库
-
-`YF_TTS.empty();`
-
-查询当前已注册指纹数量
-
-`YF_TTS.inquiry();`
-
+让TTS引擎说话。
+@param data 要朗读的文本。
+查看更多详情：https://pjfcckenlt.feishu.cn/wiki/OZcfwiVoziNnkxkKkIRcJwIZndg
+`YF_TTS.speak("谢谢使用");` 
 
 ## 更新日志 Release Note
-* V0.0.6    适配ESP32系列主板，测试在ESP32-WROOM-32E。Update Date: 04-15-2024
-* V0.0.5    适配ESP32系列主板，测试在ESP32-WROOM-32E。Update Date: 04-11-2024
-* V0.0.4    更改library.properties文件。
-* V0.0.3    新增已注册指纹(有效模板)查询函数。
-* V0.0.2    优化LED控制，增加多种LED状态；
-            优化验证指纹，增加无指纹时，LED灯控制参数；
-            优化添加指纹，增加参数，可控指纹拼接次数；
-            新增LED自由控制函数。
-* V0.0.1    基础功能完成，验证指纹，删除指纹，添加指纹。
+
+* V0.0.2    优化代码及相关注释，增加example。Update Date: 20240606
+* V0.0.1    基础功能完成，语音合成播报。Update Date: 20240430
 
 ## 联系我们 Contact Us
 * http://www.yfrobot.com.cn/wiki/index.php?title=%E8%81%94%E7%B3%BB%E6%88%91%E4%BB%AC
