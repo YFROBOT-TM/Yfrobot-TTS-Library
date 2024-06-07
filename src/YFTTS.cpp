@@ -1,29 +1,50 @@
 
 #include <YFTTS.h>
-#include <UTF8ToGB2312.h>
-
 
 /**
  * YFTTS类的构造函数
- * 用于初始化YFTTS类的实例，配置串行通信的RX和TX引脚。
+ * @param serial 串口设备名称，用于指定TTS引擎使用的串口设备
  * 
- * @param rxPin RX引脚的编号，用于接收数据。
- * @param txPin TX引脚的编号，用于发送数据。
+ * 该构造函数初始化YFTTS类的实例，绑定一个特定的串口设备用于TTS引擎的通信。
+ * 它是类的一个重要组成部分，因为TTS引擎的正确初始化离不开正确的串口配置。
  */
-YFTTS::YFTTS(int rxPin, int txPin)
-: _serial(rxPin, txPin) {} // 初始化_serial成员变量，配置串行通信的RX和TX引脚
+YFTTS::YFTTS(tserial serial)
+: _serial(serial) {} // 初始化_serial成员变量
 
 /**
  * 初始化TTS引擎，设置通信波特率和默认参数。
  * @param baudRate 串行通信的波特率。
  */
 void YFTTS::begin(long baudRate) {
+#if defined(__AVR__) || defined(ESP8266) || defined(NRF52)
   _serial.begin(baudRate);
+#endif
   setTTSParameters('m', 0);
   setTTSParameters('s', 5);
   setTTSParameters('t', 5);
   setTTSParameters('v', 1);
   delay(500);
+}
+
+/**
+ * 初始化文本转语音（TTS）模块
+ * 
+ * 此函数用于在给定的波特率和收发引脚上初始化串口，并设置TTS的初始参数。
+ * 初始化后，会等待一段时间以确保TTS模块正确启动。
+ * 
+ * @param baudRate 串口通信的波特率。
+ * @param rxPin 串口接收引脚的编号。
+ * @param txPin 串口发送引脚的编号。
+ */
+void YFTTS::begin(long baudRate, int rxPin, int txPin) {
+#ifdef ESP32
+  _serial->begin(baudRate, SERIAL_8N1, rxPin, txPin);  // 初始化串口通信
+  setTTSParameters('m', 0);  // 设置音调模式为正常
+  setTTSParameters('s', 5);  // 设置语速为中等
+  setTTSParameters('t', 5);  // 设置音调为中等
+  setTTSParameters('v', 1);  // 设置音量为正常
+  delay(500);  // 等待TTS模块启动完成
+#endif
 }
 
 /**
@@ -71,7 +92,12 @@ void YFTTS::sendData(const char *data) {
 //   output[lenGB2312 + 5] = calculateXOR(output, dat_len + 3); // 计算XOR值
 
   for (size_t i = 0; i < dat_len + 3; i++) {
+#if defined(__AVR__) || defined(ESP8266) || defined(NRF52)
     _serial.write(output[i]);
+#elif defined(ESP32)
+    _serial->write(output[i]);
+#endif
+
     // Serial.write(output[i]);
   }
   
@@ -133,7 +159,11 @@ void YFTTS::setTTSParameters(char parameter, int value) {
 
   // 发送数据
   for (int i = 0; i < 9; i++) {
+#if defined(__AVR__) || defined(ESP8266) || defined(NRF52)
     _serial.write(output[i]);
+#elif defined(ESP32)
+    _serial->write(output[i]);
+#endif
   }
 }
 

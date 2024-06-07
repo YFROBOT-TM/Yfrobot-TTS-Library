@@ -9,36 +9,49 @@ YFROBOT TTS module Library for Arduino
 * 产品购买链接: [YFROBOT商城](https://www.yfrobot.com/)、[YFROBOT淘宝商城](https://yfrobot.taobao.com/).
 
 #### 库使用说明：
-调用库：
+* 调用库：
 
 `#include <YFTTS.h>   // 包含头文件`
 
-创建对象：
+* 创建对象：
 
 UNO 主板：
-`YFROBOTTTS YF_TTS(9, 8);  //软串口引脚，RX：D9（可以忽略）   TX：D8`
+`#include <SoftwareSerial.h>`
+
+`SoftwareSerial mySerial(-1, 10);  // RX, TX ;假设我们使用10号引脚，不使用主板的 RX引脚`
+
+`YFTTS YF_TTS(mySerial);           // 绑定串口设备`
 
 ESP32 主板：
-`YFROBOTTTS YF_TTS(16, 17); // 使用 ESP32 的硬件串口2，自定义引脚RX：16    TX：17`
+`YFTTS YF_TTS(&Serial2);`
 
 Methods：
 
-初始化TTS引擎，设置通信波特率和默认参数。
-`YF_TTS.begin(115200);`
+* 初始化TTS引擎，设置通信波特率和默认参数。
 
-设置TTS参数，如发音人、音量、语速和语调。
-@param parameter 参数类型，'m'为发音人，'s'为语速，'t'为语调，'v'为音量。
-@param value 参数的值，范围为0-9。
-查看更多详情：https://pjfcckenlt.feishu.cn/wiki/JRItwhMCWi9DuOklQZScmdUjnVb
+UNO 主板：
+`YF_TTS.begin(115200);  // 初始化TTS，默认波特率115200，请注意初始化需要500ms左右`
+
+ESP32 主板：
+`YF_TTS.begin(115200, -1, 25);  // 初始化TTS，默认波特率115200, 主板TX引脚25，请注意初始化需要500ms左右`
+
+* 设置TTS参数，如发音人、音量、语速和语调。
+
+    @param parameter 参数类型，'m'为发音人，'s'为语速，'t'为语调，'v'为音量。
+    @param value 参数的值，范围为0-9。
+    查看更多详情：https://pjfcckenlt.feishu.cn/wiki/JRItwhMCWi9DuOklQZScmdUjnVb
+
 `YF_TTS.setTTSParameters('m', 0);`
 
-让TTS引擎说话。
-@param data 要朗读的文本。
-查看更多详情：https://pjfcckenlt.feishu.cn/wiki/OZcfwiVoziNnkxkKkIRcJwIZndg
+* 让TTS引擎说话。
+
+    @param data 要朗读的文本。
+    查看更多详情：https://pjfcckenlt.feishu.cn/wiki/OZcfwiVoziNnkxkKkIRcJwIZndg
 `YF_TTS.speak("谢谢使用");` 
 
 ## 更新日志 Release Note
 
+* V0.0.3    修改代码，兼容ESP32，并增加example，已测试。Update Date: 20240607
 * V0.0.2    优化代码及相关注释，增加example。Update Date: 20240606
 * V0.0.1    基础功能完成，语音合成播报。Update Date: 20240430
 
