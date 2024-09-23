@@ -16,7 +16,7 @@ YFTTS::YFTTS(tserial serial)
  * @param baudRate 串行通信的波特率。
  */
 void YFTTS::begin(long baudRate) {
-#if defined(__AVR__) || defined(ESP8266) || defined(NRF52)
+#if defined(__AVR__) || defined(ESP8266) || defined(NRF52) || defined(NRF5)
   _serial.begin(baudRate);
 #endif
   setTTSParameters('m', 0);
@@ -59,6 +59,24 @@ void YFTTS::speak(const char *data) {
 }
 
 /**
+ * 让TTS引擎说话。
+ * @param data 要朗读的文本。
+ */
+void YFTTS::speak(const String& data) {
+  speak(data.c_str());  // 调用已存在的 const char* 版本
+}
+
+/**
+ * 让TTS引擎说话。
+ * @param number 要朗读的数字，会被转换成字符串。
+ */
+void YFTTS::speak(int number) {
+  char buffer[20];  // 假设最多处理20位数字
+  snprintf(buffer, sizeof(buffer), "%d", number);
+  speak(buffer);  // 调用 const char* 版本的 speak
+}
+
+/**
  * 检查TTS引擎的工作状态。
  * @return 工作状态码，0表示空闲，其他值表示忙。
  */
@@ -92,7 +110,7 @@ void YFTTS::sendData(const char *data) {
 //   output[lenGB2312 + 5] = calculateXOR(output, dat_len + 3); // 计算XOR值
 
   for (size_t i = 0; i < dat_len + 3; i++) {
-#if defined(__AVR__) || defined(ESP8266) || defined(NRF52)
+#if defined(__AVR__) || defined(ESP8266) || defined(NRF52) || defined(NRF5)
     _serial.write(output[i]);
 #elif defined(ESP32)
     _serial->write(output[i]);
@@ -159,7 +177,7 @@ void YFTTS::setTTSParameters(char parameter, int value) {
 
   // 发送数据
   for (int i = 0; i < 9; i++) {
-#if defined(__AVR__) || defined(ESP8266) || defined(NRF52)
+#if defined(__AVR__) || defined(ESP8266) || defined(NRF52) || defined(NRF5)
     _serial.write(output[i]);
 #elif defined(ESP32)
     _serial->write(output[i]);

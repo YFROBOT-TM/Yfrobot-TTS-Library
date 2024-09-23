@@ -44,13 +44,30 @@ ESP32 主板：
 `YF_TTS.setTTSParameters('m', 0);`
 
 * 让TTS引擎说话。
-
     @param data 要朗读的文本。
     查看更多详情：https://pjfcckenlt.feishu.cn/wiki/OZcfwiVoziNnkxkKkIRcJwIZndg
+
 `YF_TTS.speak("谢谢使用");` 
+
+* 让TTS引擎说话， 支持字符串类型。
+
+`String text = "字符串测试";`
+`YF_TTS.speak(text);` 
+
+* 让TTS引擎说话， 支持数字类型。
+
+`YF_TTS.speak(20);` 
+
+
+## 硬件支持列表 Hardware Support
+主板型号            | ArduinoC    | 备注
+------------------ | :----------: | -----
+arduino uno  R3      |   √已测试    | 软串口
+ESP32系列             |   √已测试    | 硬串口Serial2
 
 ## 更新日志 Release Note
 
+* V0.0.4    增加speak函数，适配字符串变量、数字变量，并修改更新example，已测试。Update Date: 20240923
 * V0.0.3    修改代码，兼容ESP32，并增加example，已测试。Update Date: 20240607
 * V0.0.2    优化代码及相关注释，增加example。Update Date: 20240606
 * V0.0.1    基础功能完成，语音合成播报。Update Date: 20240430

@@ -5,7 +5,7 @@
 #include <Arduino.h>
 #include <UTF8ToGB2312.h>
 
-#if defined(__AVR__) || defined(ESP8266) || defined(NRF52)
+#if defined(__AVR__) || defined(ESP8266) || defined(NRF52) || defined(NRF5)
 #include <SoftwareSerial.h>
 #define tserial SoftwareSerial
 #elif defined(ESP32)
@@ -46,6 +46,10 @@ public:
      * @param data 要说的数据，以字符串形式提供
      */
     void speak(const char *data);
+    
+    void speak(const String& data); // 字符串参数
+    
+    void speak(int number); // 数字参数
     /**
      * @brief 设置语音合成参数
      * @param parameter 参数标识符
@@ -62,7 +66,7 @@ private:
     U2GB u2gb;                          /**< UTF8到GB2312转换对象，用于处理中文字符 */
 
 
-#if defined(__AVR__) || defined(ESP8266) || defined(NRF52)
+#if defined(__AVR__) || defined(ESP8266) || defined(NRF52) || defined(NRF5)
     SoftwareSerial _serial;                    /**< 用于与语音合成器通信的软件串口 */
 #elif defined(ESP32)
     HardwareSerial* _serial;            /**< 用于与语音合成器通信的硬件串口 */

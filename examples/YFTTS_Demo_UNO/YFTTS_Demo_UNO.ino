@@ -46,6 +46,18 @@ void setup() {
   YF_TTS.speak("ring_1");
   delay(2000);
 
+  String text = "字符串测试";
+  YF_TTS.speak(text); // 支持字符串类型
+  delay(2000);
+  
+  text = "100";
+  YF_TTS.speak(text); // 支持字符串类型
+  delay(2000);
+
+  int textint = 20;
+  YF_TTS.speak(textint); // 支持数字类型
+  delay(2000);
+
   /* 语音合成测试 */
   YF_TTS.speak("谢谢使用");
   delay(3000);
