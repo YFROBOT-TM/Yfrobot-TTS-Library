@@ -2,6 +2,7 @@
 # Classes, datatypes (KEYWORD1)
 #######################################
 YFTTS	KEYWORD1
+YFTTSV2	KEYWORD1
 
 #######################################
 # Methods and Functions (KEYWORD2)
