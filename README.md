@@ -25,8 +25,13 @@ UNO 主板：
 
 `YFTTS YF_TTS(mySerial);           // 绑定串口设备`
 
+`YFTTSV2 YF_TTS(mySerial);           // V2版本绑定串口设备`
+
 ESP32 主板：
+
 `YFTTS YF_TTS(&Serial2);`
+
+`YFTTSV2 YF_TTS(&Serial2); // V2版本绑定串口设备`
 
 Methods：
 
@@ -70,6 +75,7 @@ ESP32系列             |   √已测试    | 硬串口Serial2
 
 ## 更新日志 Release Note
 
+* V2.0.2    修复语音合成模块V2 函数：setTTSParameters，编码数据错误。Update Date: 20251111
 * V2.0.1    新增语音合成模块V2支持(V2模块支持UTF8编码，完全适配arduino，显著减少Flash占用，程序空间释放，更适合多功能应用)，并修改更新example，已测试。Update Date: 20251107
 * V0.0.4    增加speak函数，适配字符串变量、数字变量，并修改更新example，已测试。Update Date: 20240923
 * V0.0.3    修改代码，兼容ESP32，并增加example，已测试。Update Date: 20240607

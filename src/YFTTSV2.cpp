@@ -162,8 +162,8 @@ void YFTTSV2::setTTSParameters(char parameter, int value) {
   output[0] = 0xFD;  // 帧头
   output[1] = 0x00;  // 数据长度的高字节
   output[2] = 0x06;  // 数据长度的低字节 (6 bytes for parameter code + 1 for command + 1 for encoding)
-  output[3] = 0x04;  // 命令字 for YFTTS_V2 UTF8
-  output[4] = 0x01;  // 编码参数
+  output[3] = 0x01;  // 命令字
+  output[4] = 0x04;  // 编码参数 for YFTTS_V2 UTF8
 
   // 复制参数代码到发送缓冲区
   for (int i = 0; i < 4; i++) {
